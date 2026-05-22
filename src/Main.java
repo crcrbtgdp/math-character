@@ -12,14 +12,13 @@ public class Main {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JTabbedPane tab = new JTabbedPane();
-        JPanel subscript = new JPanel(new GridBagLayout());
-        JPanel superscript = new JPanel(new GridBagLayout());
-
-        JScrollPane scroll1 = new JScrollPane(subscript);
-        JScrollPane scroll2 = new JScrollPane(superscript);
-        scroll1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scroll2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
+        JPanel[] table = new JPanel[3];
+        JScrollPane[] scroll = new JScrollPane[3];
+        for (int i = 0; i < 3; i++) {
+            table[i] = new JPanel(new GridBagLayout());
+            scroll[i] = new JScrollPane(table[i]);
+            scroll[i].setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        }
 
         ArrayList<ArrayList<Character>> chars = new ArrayList<>();
         char[][] chars2 = new char[3][];
@@ -46,31 +45,36 @@ public class Main {
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.weighty = 1;
-        int i = 0;
+        int iii = 0;
         int times;
+        int end3 = 0;
         addcomponent:
         while (true) {
             gbc.gridx = 0;
             for (int j = 0; j < 10; j++) {
                 gbc.gridx++;
-                times = j+(i*10);
+                times = j+(iii*10);
                 if (times >= chars2[0].length || times >= chars2[1].length) {break addcomponent;}
-                JButton jb = new JButton(String.valueOf(chars2[0][times]));
-                jb.setFont(new Font(Font.DIALOG, Font.ITALIC, 28));
-                subscript.add(jb, gbc);
-                jb = new JButton(String.valueOf(chars2[1][times]));
-                jb.setFont(new Font(Font.DIALOG, Font.ITALIC, 28));
-                superscript.add(jb, gbc);
+                JButton jb;
+                if (end3 == 0 && times >= chars2[2].length) {end3 = 1;}
+                for (int i = 0; i < table.length-end3; i++) {
+                    jb = new JButton(String.valueOf(chars2[i][times]));
+                    jb.setFont(new Font(Font.DIALOG, Font.ITALIC, 28));
+                    table[i].add(jb, gbc);
+                }
             }
             gbc.gridy++;
-            i++;
+            iii++;
         }
 
-        subscript = addScrollPane(subscript, scroll1);
-        superscript = addScrollPane(superscript, scroll2);
+        for (int i = 0; i < 3; i++) {
+            table[i] = addScrollPane(table[i], scroll[i]);
+        }
 
-        tab.addTab("下付き文字", subscript);
-        tab.addTab("上付き文字", superscript);
+        tab.addTab("下付き文字", table[0]);
+        tab.addTab("上付き文字", table[1]);
+        tab.addTab("ギリシャ文字", table[2]);
+        
 
         jf.add(tab);
         
