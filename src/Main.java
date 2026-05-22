@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,8 +15,11 @@ public class Main {
         JPanel subscript = new JPanel(new GridBagLayout());
         JPanel superscript = new JPanel(new GridBagLayout());
 
-        tab.addTab("下付き文字", subscript);
-        tab.addTab("上付き文字", superscript);
+        JScrollPane scroll1 = new JScrollPane(subscript);
+        JScrollPane scroll2 = new JScrollPane(superscript);
+        scroll1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scroll2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
 
         ArrayList<ArrayList<Character>> chars = new ArrayList<>();
         char[][] chars2 = new char[3][];
@@ -61,8 +65,22 @@ public class Main {
             gbc.gridy++;
             i++;
         }
+
+        subscript = addScrollPane(subscript, scroll1);
+        superscript = addScrollPane(superscript, scroll2);
+
+        tab.addTab("下付き文字", subscript);
+        tab.addTab("上付き文字", superscript);
+
         jf.add(tab);
         
         jf.setVisible(true);
+    }
+
+    private static JPanel addScrollPane(JPanel a, JScrollPane b) {
+        JPanel c = new JPanel();
+        c.add(a, BorderLayout.CENTER);
+        c.add(b, BorderLayout.EAST);
+        return c;
     }
 }
